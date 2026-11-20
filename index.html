@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Dashboard — Atur Harimu</title>
+  <meta name="description" content="Dashboard pribadi untuk mengatur aktivitas harian, daftar tugas, jadwal kegiatan, dan target pribadi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <span class="brand-mark">✦</span>
+        Life<span class="brand-light">board</span>
+      </a>
+      <div class="top-actions">
+        <span class="today-label" id="topDate"></span>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Aktifkan mode gelap"><span id="themeIcon">☾</span></button>
+      </div>
+    </header>
+
+    <section class="welcome-card">
+      <span class="decor decor-one"></span>
+      <span class="decor decor-two"></span>
+      <div class="welcome-copy">
+        <p class="eyebrow">SELAMAT DATANG KEMBALI</p>
+        <h1 id="greeting">Halo!</h1>
+        <p class="welcome-subtitle">Satu tempat untuk mengatur aktivitas harian, tugas, jadwal, dan target pribadimu.</p>
+        <div class="name-setting">
+          <label for="userName">Panggil aku</label>
+          <div class="name-input-wrap">
+            <input id="userName" type="text" maxlength="24" placeholder="Nama panggilanmu" autocomplete="off" />
+            <button class="text-button" id="saveName" type="button">Simpan</button>
+          </div>
+        </div>
+      </div>
+      <div class="clock-panel">
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="clock-date" id="fullDate"></div>
+        <div class="clock-dot"><span></span>WAKTU PERANGKATMU</div>
+      </div>
+    </section>
+
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon lavender">✓</div>
+        <div>
+          <p class="stat-label">Tugas Selesai</p>
+          <strong id="doneTasks">0</strong>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon mint">◎</div>
+        <div>
+          <p class="stat-label">Tugas Tertunda</p>
+          <strong id="pendingTasks">0</strong>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon peach">◈</div>
+        <div>
+          <p class="stat-label">Total Target</p>
+          <strong id="totalGoals">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <main class="dashboard-grid">
+      <section class="panel focus-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">FOKUS</p>
+            <h2>Focus Timer</h2>
+          </div>
+          <span class="pill" id="taskCount">0 tugas</span>
+        </div>
+        <div class="timer-ring" id="timerRing">
+          <div class="timer-inner">
+            <span class="timer-mode" id="timerMode">WAKTU FOKUS</span>
+            <strong id="timerDisplay">25:00</strong>
+            <span class="timer-caption" id="timerCaption">Siap untuk mulai?</span>
+          </div>
+        </div>
+        <div class="timer-controls">
+          <button class="button button-primary" id="startTimer" type="button">▶ Mulai</button>
+          <button class="button button-secondary" id="stopTimer" type="button">‖ Berhenti</button>
+          <button class="button button-quiet" id="resetTimer" type="button">↺ Atur Ulang</button>
+        </div>
+        <div class="duration-setting">
+          <label for="durationInput">Durasi sesi (menit)</label>
+          <div class="duration-control">
+            <input id="durationInput" type="number" min="1" max="180" value="25" />
+            <button class="button button-secondary" id="applyDuration" type="button">Terapkan</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel tasks-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">PRODUKTIVITAS</p>
+            <h2>Daftar Tugas</h2>
+          </div>
+          <span class="count-badge" id="doneBadge">0/0 selesai</span>
+        </div>
+        <p class="panel-description">Catat tugas harianmu, tandai yang sudah selesai, dan atur urutannya.</p>
+        <form class="add-form" id="taskForm">
+          <input id="taskInput" type="text" placeholder="Tulis tugas baru…" autocomplete="off" maxlength="120" />
+          <button class="button button-primary add-button" type="submit">+ Tambah</button>
+        </form>
+        <div class="task-toolbar">
+          <span id="taskSummary">Belum ada tugas</span>
+          <label>
+            Urutkan
+            <select id="taskSort">
+              <option value="newest">Terbaru</option>
+              <option value="oldest">Terlama</option>
+              <option value="pending">Belum selesai</option>
+            </select>
+          </label>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
+        <div class="empty-state" id="emptyTasks">
+          <span class="empty-icon">🗒️</span>
+          <strong>Belum ada tugas</strong>
+          <p>Tambahkan tugas pertamamu melalui kolom di atas.</p>
+        </div>
+      </section>
+
+      <section class="panel schedule-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">AGENDA</p>
+            <h2>Jadwal Kegiatan</h2>
+          </div>
+          <span class="count-badge" id="scheduleCount">0 kegiatan</span>
+        </div>
+        <p class="panel-description">Susun jadwal kegiatan berdasarkan tanggal dan jam, urut dari yang terdekat.</p>
+        <form class="schedule-form" id="scheduleForm">
+          <input id="scheduleTitle" type="text" placeholder="Nama kegiatan" maxlength="80" autocomplete="off" />
+          <div class="schedule-datetime">
+            <input id="scheduleDate" type="date" aria-label="Tanggal kegiatan" />
+            <input id="scheduleTime" type="time" aria-label="Jam kegiatan" />
+          </div>
+          <button class="button button-primary" type="submit">+ Tambah Kegiatan</button>
+        </form>
+        <ul class="schedule-list" id="scheduleList"></ul>
+        <div class="empty-state" id="emptySchedule">
+          <span class="empty-icon">📅</span>
+          <strong>Jadwal masih kosong</strong>
+          <p>Catat kegiatan mendatang agar tidak terlewat.</p>
+        </div>
+      </section>
+
+      <section class="panel goals-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">PERTUMBUHAN</p>
+            <h2>Target Pribadi</h2>
+          </div>
+          <span class="count-badge" id="goalCount">0 target</span>
+        </div>
+        <p class="panel-description">Tetapkan target dan pantau kemajuannya. Naikkan angka setiap kali maju selangkah.</p>
+        <form class="goal-form" id="goalForm">
+          <input id="goalName" type="text" placeholder="Nama target, mis. baca 12 buku" maxlength="80" autocomplete="off" />
+          <input id="goalTarget" type="number" min="1" max="9999" placeholder="Target" aria-label="Jumlah target" />
+          <button class="button button-primary" type="submit">+ Tambah Target</button>
+        </form>
+        <ul class="goal-list" id="goalList"></ul>
+        <div class="empty-state" id="emptyGoals">
+          <span class="empty-icon">🎯</span>
+          <strong>Belum ada target</strong>
+          <p>Mulai dengan satu target kecil yang bermakna untukmu.</p>
+        </div>
+      </section>
+
+      <section class="panel links-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">AKSES CEPAT</p>
+            <h2>Quick Links</h2>
+          </div>
+          <span class="link-symbol">🔗</span>
+        </div>
+        <form class="link-form" id="linkForm">
+          <input id="linkName" type="text" placeholder="Nama situs" maxlength="30" autocomplete="off" />
+          <input id="linkUrl" type="url" placeholder="contoh.com" autocomplete="off" />
+          <button class="button button-secondary" type="submit">Simpan Tautan</button>
+        </form>
+        <div class="quick-links" id="quickLinks"></div>
+        <p class="small-note">Tautan tersimpan di perangkat ini dan terbuka di tab baru.</p>
+      </section>
+
+      <section class="panel tip-panel">
+        <div class="tip-icon">💡</div>
+        <div>
+          <h2>Tips Hari Ini</h2>
+          <p>Mulai hari dengan tugas paling penting, gunakan focus timer 25 menit tanpa gangguan, lalu istirahat 5 menit. Konsistensi kecil setiap hari lebih berarti daripada usaha besar sesekali.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Dibuat dengan <b>HTML, CSS, dan JavaScript</b> murni.</span>
+      <span id="year"></span>
+    </footer>
+  </div>
+
+  <dialog class="edit-dialog" id="editDialog">
+    <div class="dialog-heading">
+      <h2>Edit Tugas</h2>
+      <button class="icon-button close-dialog" type="button" onclick="document.getElementById('editDialog').close()">×</button>
+    </div>
+    <form id="editForm" method="dialog">
+      <label for="editTaskInput">Nama tugas</label>
+      <input id="editTaskInput" type="text" maxlength="120" autocomplete="off" />
+      <div class="dialog-actions">
+        <button class="button button-quiet" type="button" onclick="document.getElementById('editDialog').close()">Batal</button>
+        <button class="button button-primary" type="submit">Simpan Perubahan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
